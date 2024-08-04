@@ -29,15 +29,3 @@ class TestHTMLNode(unittest.TestCase):
         result = self.htmlnode.props_to_html()
         self.assertEqual(result, 'href="https://www.google.com" target="_blank"')
 
-        # {
-        #   "href": "https://www.google.com", 
-        #   "target": "_blank",
-        # } 
-
-        # to
-
-        #  href="https://www.google.com" target="_blank"
-
-
-#node = HTMLNode("p", "text inside a paragraph", None, {"href": "https://www.google.com", "target": "_blank"})
-#child = HTMLNode("a", "text", None, {"href": "https://www.google.com", "target": "_blank"})
