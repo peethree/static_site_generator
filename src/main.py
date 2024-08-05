@@ -14,8 +14,7 @@ class TextType(Enum):
     LINK = "link"
     IMAGE = "image"
 
-def text_node_to_html_node(text_node):
-    # text_node: TextNode("This is a text node", "bold", "https://www.boot.dev")
+def text_node_to_html_node(text_node):    
     match text_node.text_type:
         case TextType.TEXT:            
             return convert_text(text_node)            
@@ -33,8 +32,12 @@ def text_node_to_html_node(text_node):
         
 
 def convert_text(text_node):
+    # text_node: TextNode("This is a text node", "bold", "https://www.boot.dev")
     # return leafnode text
-    pass
+
+    text = text_node.value 
+    converted_text = LeafNode(None, text, None)
+    return converted_text
 
 def convert_bold(text_node):
     # return leafnode <b>text</b>
