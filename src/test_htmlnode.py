@@ -29,3 +29,7 @@ class TestHTMLNode(unittest.TestCase):
         result = self.htmlnode.props_to_html()
         self.assertEqual(result, 'href="https://www.google.com" target="_blank"')
 
+
+if __name__ == "__main__":
+    unittest.main()
+
