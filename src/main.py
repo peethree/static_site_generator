@@ -1,4 +1,5 @@
 from textnode import TextNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 from enum import Enum
 
 def main():
@@ -16,25 +17,45 @@ class TextType(Enum):
 def text_node_to_html_node(text_node):
     # text_node: TextNode("This is a text node", "bold", "https://www.boot.dev")
     match text_node.text_type:
-        case TextType.TEXT:
-            # return leafnode raw text
-            pass
-        case TextType.BOLD:
-            # return leafnode <b>text</b>
-            pass
-        case TextType.ITALIC:
-            # return <i>text</i>
-            pass
-        case TextType.CODE:
-            # return code tag text
-            pass
-        case TextType.LINK:
-            # return <a href="hi.com>text</a>"
-            pass
-        case TextType.IMAGE:
-            # <img> empty string "src" and "alt" props ("src" is the image URL, "alt" is the alt text </img>
-            pass
+        case TextType.TEXT:            
+            return convert_text(text_node)            
+        case TextType.BOLD:            
+            return convert_bold(text_node)            
+        case TextType.ITALIC:            
+            return convert_italic(text_node)
+        case TextType.CODE:            
+            return convert_code(text_node)
+        case TextType.LINK:            
+            return convert_link(text_node)
+        case TextType.IMAGE:            
+            return convert_image(text_node)
+    raise Exception("Invalid text type")
         
+
+def convert_text(text_node):
+    # return leafnode text
+    pass
+
+def convert_bold(text_node):
+    # return leafnode <b>text</b>
+    pass
+
+def convert_italic(text_node):
+    # return <i>text</i>
+    pass
+
+def convert_code(text_node):
+    # return code tag text
+    pass
+
+def convert_link(text_node):
+    # return <a href="hi.com>text</a>"
+    pass
+
+def convert_image(text_node):
+    # <img> empty string "src" and "alt" props ("src" is the image URL, "alt" is the alt text </img>
+    pass
+
 
 
 
