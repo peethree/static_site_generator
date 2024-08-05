@@ -1,88 +1,77 @@
 from textnode import TextNode
 from htmlnode import HTMLNode, LeafNode, ParentNode
-from enum import Enum
+
 
 def main():
     node = TextNode("This is a text node", "bold", "https://www.boot.dev")
-    print(node)
+    result = text_node_to_html_node(node)
+    print(result)
 
-class TextType(Enum):
-    TEXT = "text"
-    BOLD = "bold"
-    ITALIC = "italic"
-    CODE = "code"
-    LINK = "link"
-    IMAGE = "image"
 
-def text_node_to_html_node(text_node):    
-    match text_node.text_type:
-        case TextType.TEXT:            
-            return convert_text(text_node)            
-        case TextType.BOLD:            
-            return convert_bold(text_node)            
-        case TextType.ITALIC:            
-            return convert_italic(text_node)
-        case TextType.CODE:            
-            return convert_code(text_node)
-        case TextType.LINK:            
-            return convert_link(text_node)
-        case TextType.IMAGE:            
-            return convert_image(text_node)
-    raise Exception("Invalid text type")
+def text_node_to_html_node(text_node):     
+
+    if text_node.text_type == "text":          
+        return convert_text(text_node)            
+    elif text_node.text_type == "bold":            
+        return convert_bold(text_node)            
+    elif text_node.text_type == "italic":     
+        return convert_italic(text_node)
+    elif text_node.text_type == "code":
+        return convert_code(text_node)
+    elif text_node.text_type == "link":            
+        return convert_link(text_node)
+    elif text_node.text_type == "image": 
+        return convert_image(text_node)
+    else:
+        Exception("Invalid text type")
         
-
+# text_node: TextNode("This is a text node", "bold", "https://www.boot.dev")
 def convert_text(text_node):
-    # text_node: TextNode("This is a text node", "bold", "https://www.boot.dev")
-    # return leafnode text
+    # return leafnode object with text
 
-    text = text_node.value 
-    converted_text = LeafNode(None, text, None)
+    text = f"{text_node.text}" 
+    converted_text = LeafNode(text)
     return converted_text
 
 def convert_bold(text_node):
-    # return leafnode <b>text</b>
-    pass
+    # return leafnode object <b>text</b>
+
+    text = f"{text_node.text}"
+    converted_text = LeafNode("b", text)
+    return converted_text
 
 def convert_italic(text_node):
     # return <i>text</i>
-    pass
+
+    text = text_node.text
+    converted_text = f"<i>{text}</i>"
+    return converted_text
 
 def convert_code(text_node):
     # return code tag text
-    pass
+
+    text = text_node.text
+    converted_text = f"<code>{text}</code>"
+    return converted_text
 
 def convert_link(text_node):
-    # return <a href="hi.com>text</a>"
-    pass
+    # return <a href="hi.com">text</a>
+    text = text_node.text
+    url = text_node.url
+
+    converted_text = f'<a href="{url}">{text}</a>'
+    return converted_text
 
 def convert_image(text_node):
     # <img> empty string "src" and "alt" props ("src" is the image URL, "alt" is the alt text </img>
-    pass
+    url = text_node.url
+    text = text_node.text
 
+    converted_text = f'<img src="{url}" alt="{text}"></img>'
+    return converted_text
 
-
-
-
-
-# class EditType(Enum):
-#     NEWLINE = 1
-#     SUBSTITUTE = 2
-#     INSERT = 3
-#     DELETE = 4
-
-# # document: string, edit_type: EditType enum, edit: dict
-# def handle_edit(document, edit_type, edit):
-#     match edit_type:
-#         case EditType.NEWLINE:
-#             return new_line(document, edit)
-#         case EditType.SUBSTITUTE:
-#             return substitute(document, edit)
-#         case EditType.INSERT:
-#             return insert(document, edit)
-#         case EditType.DELETE:
-#             return delete(document, edit)
-
-#     raise Exception("Unknown edit type")
+def split_nodes_delimiter(old_nodes, delimiter, text_type):
+    # TODO
 
 
 if __name__ == "__main__":
