@@ -72,6 +72,7 @@ def convert_image(text_node):
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     # TODO
+    pass
 
 
 if __name__ == "__main__":
