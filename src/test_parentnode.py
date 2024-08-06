@@ -16,6 +16,7 @@ class TestParentNode(unittest.TestCase):
         
         self.assertEqual(str(context.exception), "ParentNode needs a tag")
 
+    
     # parent (text) value is none
     def test_parent_node_value(self):
         child = LeafNode("a", "test", None)
