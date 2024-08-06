@@ -1,0 +1,55 @@
+import unittest
+
+from split_nodes_delimiter import split_nodes_delimiter
+from textnode import TextNode
+
+
+
+class TestSplitNodesDelimiter(unittest.TestCase):
+    def test_multiple_nodes(self):
+        old_nodes = [TextNode("This is text with text", "text"), TextNode("and bold **text**", "text")]
+        delimiter = "**"
+        text_type = "text"
+        result = split_nodes_delimiter(old_nodes, delimiter, text_type)
+
+        self.assertEqual(result, [TextNode("This is text with text", "text"), TextNode("and bold ", "text"), TextNode("text", "bold")])
+
+    def test_text_node(self):
+        old_nodes = [TextNode("This is text with a ", "text")]
+        delimiter = "**"
+        text_type = "text"
+        result = split_nodes_delimiter(old_nodes, delimiter, text_type)
+
+        self.assertEqual(result, [TextNode("This is text with a ", "text")])
+
+    def test_bold_delimeter(self):
+        old_nodes = [TextNode("This is text with a **bold** word", "text")]
+        delimiter = "**"
+        text_type = "text"
+        result = split_nodes_delimiter(old_nodes, delimiter, text_type)
+
+        self.assertEqual(result, [TextNode("This is text with a ", "text"), TextNode("bold", "bold"), TextNode(" word", "text")])
+
+    def test_italic_delimeter(self):
+        old_nodes = [TextNode("This is text with an *italic* word", "text")]
+        delimiter = "*"
+        text_type = "text"
+        result = split_nodes_delimiter(old_nodes, delimiter, text_type)
+
+        self.assertEqual(result, [TextNode("This is text with an ", "text"), TextNode("italic", "italic"), TextNode(" word", "text")])
+
+    def test_code_delimeter(self):
+        old_nodes = [TextNode("This is text with a ```code``` block", "text")]
+        delimiter = "```"
+        text_type = "text"
+        result = split_nodes_delimiter(old_nodes, delimiter, text_type)
+
+        self.assertEqual(result, [TextNode("This is text with a ", "text"), TextNode("code", "code"), TextNode(" block", "text")])
+
+    def test_text_type(self):
+        old_nodes = [TextNode("**text**", "bold")]
+        delimiter = "**"
+        text_type = "bold"
+        result = split_nodes_delimiter(old_nodes, delimiter, text_type)
+
+        self.assertEqual(result, [TextNode("**text**", "bold")])

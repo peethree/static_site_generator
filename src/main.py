@@ -1,5 +1,6 @@
 from textnode import TextNode
 from htmlnode import HTMLNode, LeafNode, ParentNode
+from split_nodes_delimiter import split_nodes_delimiter
 
 
 def main():
@@ -70,9 +71,6 @@ def convert_image(text_node):
     converted_text = f'<img src="{url}" alt="{text}"></img>'
     return converted_text
 
-def split_nodes_delimiter(old_nodes, delimiter, text_type):
-    # TODO
-    pass
 
 
 if __name__ == "__main__":
