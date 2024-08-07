@@ -1,6 +1,7 @@
 from textnode import TextNode
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
+    # does not work for multiple instances of the same delimiter TODO:
 
     new_list = []
 
