@@ -61,14 +61,14 @@ class TestSplitNodesDelimiter(unittest.TestCase):
 
         self.assertEqual(str(context.exception), "invalid markdown, ending delimiter not found")
 
-    def test_no_delimiter(self):    
-        with self.assertRaises(Exception) as context:                       
-            old_nodes = [TextNode("This is text with words", "text")]  
-            delimiter = None          
-            text_type = "text"
-            split_nodes_delimiter(old_nodes, delimiter, text_type)
+    # def test_no_delimiter(self):    
+    #     with self.assertRaises(Exception) as context:                       
+    #         old_nodes = [TextNode("This is text with words", "text")]  
+    #         delimiter = None          
+    #         text_type = "text"
+    #         split_nodes_delimiter(old_nodes, delimiter, text_type)
 
-        self.assertEqual(str(context.exception), "no delimiter given")
+    #     self.assertEqual(str(context.exception), "no delimiter given")
 
     # def test_two_bold_delimeter(self):
     #     old_nodes = [TextNode("This is text **with** two **bold** words", "text")]

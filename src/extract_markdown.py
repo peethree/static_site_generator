@@ -14,9 +14,11 @@ def extract_markdown_images(text):
                 image_tuple = (alt_text, url)
                 list_of_images.append(image_tuple)
         else:
-            return(text)
+            return text
 
     return list_of_images
+
+    
 
 def extract_markdown_links(text):
 
