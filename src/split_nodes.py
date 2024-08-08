@@ -6,41 +6,6 @@ text_type_text = "text"
 text_type_link = "link"
 text_type_image = "image"
 
-
-
-    # new_nodes = []    
-
-    # for node in old_nodes:
-
-    
-    #     text_value = node.text        
-
-    #     alt_texts_and_urls = extract_markdown_images(text_value)
-
-    #     # if text type != text or no image markdown is found, append the node in current state
-    #     if node.text_type != text_type_text or len(alt_texts_and_urls) == 0:
-    #         new_nodes.append(node)
-
-    #     for item in alt_texts_and_urls:
-    #         alt_text, url = item 
-
-    #         sections = text_value.split(f"![{alt_text}]({url})", 1)
-
-    #         if len(sections) != 2:
-    #             raise Exception("invalid markdown")
-            
-    #         # don't add empty strings
-    #         if sections[0] != "":
-    #             new_nodes.append(TextNode(sections[0], text_type_text))
-
-    #         new_nodes.append(TextNode(alt_text, text_type_image, url))
-    #         text_value = sections[1]
-
-    #     if text_value != "":
-    #         new_nodes.append(TextNode(text_value, text_type_text))
-
-    # return new_nodes
-
 def split_nodes_image(old_nodes):
     """
     takes a list of old nodes as input, extracts each node's text value. 
@@ -117,16 +82,11 @@ def split_nodes_link(old_nodes):
 
     return new_nodes
 
-old_nodes = [TextNode("This is text with a link to [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
-        "text"), TextNode("This is text with an image ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)", "text")
-        ]
+# old_nodes = [TextNode("This is text with a link to [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
+#         "text"), TextNode("This is text with an image ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)", "text")
+#         ]
 
-print(split_nodes_link(old_nodes))
-
-# [TextNode(This is text with a link to [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev), text, None), 
-# TextNode(This is text with a link to [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev), text, None), 
-# TextNode(This is text with an image , text, None), TextNode(rick roll, image, https://i.imgur.com/aKaOqIh.gif), TextNode( and , text, None), TextNode(obi wan, image, https://i.imgur.com/fJRm4Vk.jpeg)]
-
+# print(split_nodes_link(old_nodes))
 
 # always check images first
 
