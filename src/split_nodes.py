@@ -2,113 +2,132 @@ from extract_markdown import extract_markdown_images, extract_markdown_links
 from textnode import TextNode
 import re
 
+text_type_text = "text"
+text_type_link = "link"
+text_type_image = "image"
+
+
+
+    # new_nodes = []    
+
+    # for node in old_nodes:
+
+    
+    #     text_value = node.text        
+
+    #     alt_texts_and_urls = extract_markdown_images(text_value)
+
+    #     # if text type != text or no image markdown is found, append the node in current state
+    #     if node.text_type != text_type_text or len(alt_texts_and_urls) == 0:
+    #         new_nodes.append(node)
+
+    #     for item in alt_texts_and_urls:
+    #         alt_text, url = item 
+
+    #         sections = text_value.split(f"![{alt_text}]({url})", 1)
+
+    #         if len(sections) != 2:
+    #             raise Exception("invalid markdown")
+            
+    #         # don't add empty strings
+    #         if sections[0] != "":
+    #             new_nodes.append(TextNode(sections[0], text_type_text))
+
+    #         new_nodes.append(TextNode(alt_text, text_type_image, url))
+    #         text_value = sections[1]
+
+    #     if text_value != "":
+    #         new_nodes.append(TextNode(text_value, text_type_text))
+
+    # return new_nodes
 
 def split_nodes_image(old_nodes):
-    """takes an old node as input, extracts its text value. 
-    based on markdown image syntax pattern it splits the text.
-    try to apply extract_markdown function and append its result to a list.
-    filter out any empty lists that resulted from empty strings"""
+    """
+    takes a list of old nodes as input, extracts each node's text value. 
+    based on markdown image syntax pattern it splits the text with max split of 1.
+    so there's only 1 string on each side of the split delimiter.The middle index of 
+    the result of the split will be our image. For every set of (alt_text, url), 
+    append a TextNode with the regular text part at index 0 to new_nodes list only if it
+    is not an empty string. Then append the image TextNode and lastly the third item in the 
+    sections list. After this update text_value to that of the remaining string.    
+    """
 
     new_nodes = []
 
-    for node in old_nodes:
+    for node in old_nodes:        
         text_value = node.text
+        alt_texts_and_urls = extract_markdown_images(text_value)
 
-        new_list = [] 
+        if alt_texts_and_urls:
+            
+            for alt_text, url in alt_texts_and_urls:
+                sections = text_value.split(f"![{alt_text}]({url})", 1)
 
-        pattern = r"(\!\[.*?\]\(.*?\))"  
-
-        text_type_text = "text"
-        text_type_image = "image"
-
-        sequence = re.split(pattern, text_value)
-
-        for seq in sequence:
-            try:
-                new_seq = extract_markdown_images(seq)
-                new_list.append(new_seq)
-            except:
-                new_list.append(seq)
-
-        filtered_list = []
-        
-        for item in new_list:
-            # remove empty lists from the result
-            if item != []:            
-                filtered_list.append(item)
-
-        
-
-        for item in new_list:
-            # if item is regular text and not empty, turn it into a textnode    
-            if item != None and not isinstance(item, list):
+                if len(sections) != 2:
+                    raise Exception("invalid markdown")
                 
-                node = TextNode(item, text_type_text)
-                new_nodes.append(node)
-
-            # if item is an instance of a tuple, then it's a link --> first item in tuple is anchor text, 
-            if isinstance(item, list) and len(item) == 1 and isinstance(item[0], tuple):
+                if sections[0] != "":
+                    new_nodes.append(TextNode(sections[0], text_type_text))
                 
-                alt_text, url = item[0]                     
-                node = TextNode(alt_text, text_type_image, url)
-                new_nodes.append(node)
-        
+                new_nodes.append(TextNode(alt_text, text_type_image, url))
+
+                # update the text_value to the remaining part of the string
+                text_value = sections[1]
+
+            # add remaining text after the image if it's not an empty string
+            if text_value != "":
+                new_nodes.append(TextNode(text_value, text_type_text))
+        else:
+            # no images found with extract_markdown, add the original node instead
+            new_nodes.append(node)
+
     return new_nodes
         
 
 def split_nodes_link(old_nodes):  
+
     new_nodes = []
 
-    for node in old_nodes:
+    for node in old_nodes:        
         text_value = node.text
+        anchor_text_and_href = extract_markdown_links(text_value)
 
-        new_list = []   
+        if anchor_text_and_href:
+            
+            for anchor_text, href in anchor_text_and_href:
+                sections = text_value.split(f"[{anchor_text}]({href})", 1)
 
-        # pattern = r"(?<!!)\[(.*?)\]\((.*?)\)"       
-        pattern = r"(\[.*?\]\(.*?\))"   
-
-        text_type_text = "text"
-        text_type_link = "link"
-        
-        sequence = re.split(pattern, text_value)   
-        # ['This is text with a link ', '[to boot dev](https://www.boot.dev)', ' and' '[to youtube](https://www.youtube.com/@bootdotdev)']
-        
-        for seq in sequence:
-            try:
-                new_seq = extract_markdown_links(seq)
-                new_list.append(new_seq)
-            except:
-                new_list.append(seq)
-
-        filtered_list = []
-        
-        for item in new_list:
-            # remove empty lists from the result
-            if item != []:            
-                filtered_list.append(item)
-
-        
-
-        for item in new_list:
-            # if item is regular text and not empty, turn it into a textnode    
-            if item != None and not isinstance(item, list):
+                if len(sections) != 2:
+                    raise Exception("invalid markdown")
                 
-                node = TextNode(item, text_type_text)
-                new_nodes.append(node)
+                if sections[0] != "":
+                    new_nodes.append(TextNode(sections[0], text_type_text))
+                
+                new_nodes.append(TextNode(anchor_text, text_type_link, href))
 
-            # if item is an instance of a tuple, then it's a link --> first item in tuple is anchor text, 
-            if isinstance(item, list) and len(item) == 1 and isinstance(item[0], tuple):
-                # item = [('to boot dev', 'https://www.boot.dev')]
-                anchor_text, url = item[0]                     
-                node = TextNode(anchor_text, text_type_link, url)
-                new_nodes.append(node)                   
-    
-    
+                # update the text_value to the remaining part of the string
+                text_value = sections[1]
+
+            # add remaining text after the image if it's not an empty string
+            if text_value != "":
+                new_nodes.append(TextNode(text_value, text_type_text))
+        else:
+            # no images found with extract_markdown, add the original node instead
+            new_nodes.append(node)
+
     return new_nodes
 
+old_nodes = [TextNode("This is text with a link to [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
+        "text"), TextNode("This is text with an image ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)", "text")
+        ]
+
+print(split_nodes_link(old_nodes))
+
+# [TextNode(This is text with a link to [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev), text, None), 
+# TextNode(This is text with a link to [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev), text, None), 
+# TextNode(This is text with an image , text, None), TextNode(rick roll, image, https://i.imgur.com/aKaOqIh.gif), TextNode( and , text, None), TextNode(obi wan, image, https://i.imgur.com/fJRm4Vk.jpeg)]
 
 
-# text_value = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
 # always check images first
 
 

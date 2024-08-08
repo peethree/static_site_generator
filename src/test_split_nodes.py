@@ -21,11 +21,11 @@ class TestSplitNodes(unittest.TestCase):
 
 
     def test_split_link(self):
-        nodes = [TextNode("This is text with an image of [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
+        nodes = [TextNode("This is text with a link [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
         "text")]
         result = split_nodes_link(nodes)
 
-        self.assertEqual(result, [TextNode("This is text with an image of ", "text"), 
+        self.assertEqual(result, [TextNode("This is text with a link ", "text"), 
                                   TextNode("to boot dev", "link", "https://www.boot.dev"), 
                                   TextNode(" and ", "text"), 
                                   TextNode("to youtube", "link", "https://www.youtube.com/@bootdotdev")])

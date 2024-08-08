@@ -51,14 +51,11 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             else:
                 section_nodes.append(TextNode(sections[i], text_type))
         
-        # preserve the order of the string by extending
+        # preserve the order of the strings by extending
         new_nodes.extend(section_nodes)
 
-    return new_nodes                
+    return new_nodes            
 
-
-# old_nodes = [TextNode("**This** text really **has** 3 bolded **words** and a `code block`", text_type_text)]
-# print(split_nodes_delimiter(old_nodes, "**", "bold"))
 
  
         

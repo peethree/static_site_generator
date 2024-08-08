@@ -1,41 +1,17 @@
 import re
 
 def extract_markdown_images(text):
+    return re.findall(r"!\[(.*?)\]\((.*?)\)", text)
 
-    list_of_images = []
+#  text = "This is text with a ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)"
+# [('rick roll', 'https://i.imgur.com/aKaOqIh.gif'), ('obi wan', 'https://i.imgur.com/fJRm4Vk.jpeg')]
 
-    if text:
-        images = re.findall(r"!\[(.*?)\]\((.*?)\)", text)
-
-        if images:
-
-            for image in images:
-                alt_text, url = image
-                image_tuple = (alt_text, url)
-                list_of_images.append(image_tuple)
-        else:
-            return text
-
-    return list_of_images
 
     
 
 def extract_markdown_links(text):
+    return re.findall(r"(?<!!)\[(.*?)\]\((.*?)\)", text)
 
-    list_of_links = []
 
-    if text:
-        links = re.findall(r"(?<!!)\[(.*?)\]\((.*?)\)", text)
-
-        if links:
-
-            for link in links:            
-                anchor_text, url = link
-                image_tuple = (anchor_text, url)
-                list_of_links.append(image_tuple)
-        else:
-            return text
-
-    return list_of_links
 
 

@@ -61,19 +61,19 @@ class TestSplitNodesDelimiter(unittest.TestCase):
 
         self.assertEqual(str(context.exception), "missing ending delimiter")
 
-    # def test_no_delimiter(self):    
-    #     with self.assertRaises(Exception) as context:                       
-    #         old_nodes = [TextNode("This is text with words", "text")]  
-    #         delimiter = None          
-    #         text_type = "text"
-    #         split_nodes_delimiter(old_nodes, delimiter, text_type)
+    def test_no_delimiter(self):    
+        with self.assertRaises(Exception) as context:                       
+            old_nodes = [TextNode("This is text with words", "text")]  
+            delimiter = None          
+            text_type = "text"
+            split_nodes_delimiter(old_nodes, delimiter, text_type)
 
-    #     self.assertEqual(str(context.exception), "no delimiter given")
+        self.assertEqual(str(context.exception), "invalid delimiter")
 
-    # def test_two_bold_delimeter(self):
-    #     old_nodes = [TextNode("This is text **with** two **bold** words", "text")]
-    #     delimiter = "**"
-    #     text_type = "text"
-    #     result = split_nodes_delimiter(old_nodes, delimiter, text_type)
+    def test_two_bold_delimeter(self):
+        old_nodes = [TextNode("This is text **with** two **bold** words", "text")]
+        delimiter = "**"
+        text_type = "bold"
+        result = split_nodes_delimiter(old_nodes, delimiter, text_type)
 
-    #     self.assertEqual(result, [TextNode("This is text ", "text"), TextNode("with", "bold"), TextNode(" two", "text"), TextNode("bold", "bold"), TextNode(" words", "text")])
+        self.assertEqual(result, [TextNode("This is text ", "text"), TextNode("with", "bold"), TextNode(" two ", "text"), TextNode("bold", "bold"), TextNode(" words", "text")])
