@@ -1,77 +1,64 @@
 from textnode import TextNode
 
+text_type_text = "text"
+text_type_bold = "bold"
+text_type_italic = "italic"
+text_type_code = "code"
+text_type_link = "link"
+text_type_image = "image"
+
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
-    # does not work for multiple instances of the same delimiter TODO:
-
-    new_list = []
-
-    text_type_text = "text"
-    text_type_bold = "bold"
-    text_type_italic = "italic"
-    text_type_code = "code"    
+    new_nodes = []
 
     for node in old_nodes:        
 
-        if text_type != text_type_text:
-            new_list.append(node)
-            return new_list
-
-        # If a matching closing delimiter is not found, 
-        # raise an exception.
-        text_content = node.text
-
-        try:
-            delimiter_count = text_content.count(delimiter)
-        except:
-            raise Exception("no delimiter given")
-            
-        if delimiter_count == 0:
-            new_list.append(node)
-        if delimiter_count == 1:
-            raise Exception("invalid markdown, ending delimiter not found")
+        # If an "old node" is not a "text" type, just add it to the new list as-is
+        if node.text_type != text_type_text:
+            new_nodes.append(node)
+            return new_nodes       
+    
         
-        if delimiter_count == 2:
-            sections = text_content.split(delimiter)
+        valid_delimiters = ["**", "*", "`"]
 
-            # this is a **test**"
-            # sections = ['this is a ', 'test', '']
+        if delimiter not in valid_delimiters:
+            raise Exception("invalid delimiter")
 
-            # this **is** a test
-            # ['this ', 'is', ' a test']
+        sections = node.text.split(delimiter)      
 
-            # **this** is a test
-            # ['', 'this', ' is a test']
+        # this is a **test**"
+        # sections = ['this is a ', 'test', '']
 
-            part_before_delimiter = sections[0]
-            part_between_delimiter = sections[1]
-            part_after_delimiter = sections[2]
+        # this **is** a test
+        # ['this ', 'is', ' a test']
 
-            # TextNode does not support empty string, so only add when it has an actual value
-            if part_before_delimiter != "":
-                new_list.append(TextNode(part_before_delimiter, text_type_text))
+        # **this** is a test
+        # ['', 'this', ' is a test']
 
-            if delimiter == "**":
-                t_type = text_type_bold
-            if delimiter == "*":
-                t_type = text_type_italic
-            if delimiter == "```":
-                t_type = text_type_code            
-            
-            new_list.append(TextNode(part_between_delimiter, t_type))
+        # the uneven index is the string closed in by delimiters
 
-            # same here as for part_before_delimiter
-            if part_after_delimiter != "":
-                new_list.append(TextNode(part_after_delimiter, text_type_text))
+        # if the remainder of the split is not divisible by 2 then an uneven number of delimiters was found in the string
+        if len(sections) % 2 == 0:
+            raise Exception("missing ending delimiter")
+        
+        section_nodes = []
 
-    return new_list
+        for i in range(len(sections)):
+            # in case of empty string, skip over it 
+            if sections[i] == "":
+                continue            
+            if i % 2 == 0:
+                section_nodes.append(TextNode(sections[i], text_type_text))
+            else:
+                section_nodes.append(TextNode(sections[i], text_type))
+        
+        # preserve the order of the string by extending
+        new_nodes.extend(section_nodes)
 
-
-
-
-            
+    return new_nodes                
 
 
-
+# old_nodes = [TextNode("**This** text really **has** 3 bolded **words** and a `code block`", text_type_text)]
+# print(split_nodes_delimiter(old_nodes, "**", "bold"))
 
  
         
