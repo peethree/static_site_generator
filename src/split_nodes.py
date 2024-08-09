@@ -3,6 +3,9 @@ from textnode import TextNode
 import re
 
 text_type_text = "text"
+text_type_bold = "bold"
+text_type_italic = "italic"
+text_type_code = "code"
 text_type_link = "link"
 text_type_image = "image"
 
@@ -10,11 +13,11 @@ def split_nodes_image(old_nodes):
     """
     takes a list of old nodes as input, extracts each node's text value. 
     based on markdown image syntax pattern it splits the text with max split of 1.
-    so there's only 1 string on each side of the split delimiter.The middle index of 
+    so there's only 1 string on each side of the split seperator.The middle index of 
     the result of the split will be our image. For every set of (alt_text, url), 
     append a TextNode with the regular text part at index 0 to new_nodes list only if it
     is not an empty string. Then append the image TextNode and lastly the third item in the 
-    sections list. After this update text_value to that of the remaining string.    
+    sections list. After this update text_value to that of the remaining string and repeat for other images.    
     """
 
     new_nodes = []

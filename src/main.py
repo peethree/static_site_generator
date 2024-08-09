@@ -1,8 +1,9 @@
 from textnode import TextNode
 from htmlnode import HTMLNode, LeafNode, ParentNode
-# from split_nodes_delimiter import split_nodes_delimiter
 from text_node_to_html_node import text_node_to_html_node
+from split_nodes_delimiter import split_nodes_delimiter
 from extract_markdown import extract_markdown_images, extract_markdown_links
+from split_nodes import split_nodes_image, split_nodes_link
 import re
 
 

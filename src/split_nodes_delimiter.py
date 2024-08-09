@@ -14,9 +14,8 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
         # If an "old node" is not a "text" type, just add it to the new list as-is
         if node.text_type != text_type_text:
-            new_nodes.append(node)
-            return new_nodes       
-    
+            new_nodes.append(node)    
+            continue                         
         
         valid_delimiters = ["**", "*", "`"]
 
@@ -38,21 +37,16 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
 
         # if the remainder of the split is not divisible by 2 then an uneven number of delimiters was found in the string
         if len(sections) % 2 == 0:
-            raise Exception("missing ending delimiter")
-        
-        section_nodes = []
+            raise Exception("missing ending delimiter")             
 
-        for i in range(len(sections)):
+        for i, section in enumerate(sections):
             # in case of empty string, skip over it 
-            if sections[i] == "":
+            if section == "":
                 continue            
             if i % 2 == 0:
-                section_nodes.append(TextNode(sections[i], text_type_text))
+                new_nodes.append(TextNode(section, text_type_text))
             else:
-                section_nodes.append(TextNode(sections[i], text_type))
-        
-        # preserve the order of the strings by extending
-        new_nodes.extend(section_nodes)
+                new_nodes.append(TextNode(section, text_type))             
 
     return new_nodes            
 
