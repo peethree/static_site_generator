@@ -10,11 +10,9 @@ class HTMLNode:
 
     def props_to_html(self):                 
 
-        attributes = []
-
-        if self.props != None:
-            for key, value in self.props.items():
-                attributes.append(f'{key}="{value}"')
+        attributes = []               
+        for key, value in self.props.items():
+            attributes.append(f'{key}="{value}"')
 
         return " ".join(attributes)
 
@@ -24,7 +22,7 @@ class HTMLNode:
 
 class LeafNode(HTMLNode):
     def __init__(self, tag=None, value=None, props=None):
-      
+    
         super().__init__(tag, value, children=None, props=props)    
 
 
@@ -34,19 +32,17 @@ class LeafNode(HTMLNode):
             raise ValueError("All leaf nodes must have a value")
         
         if self.tag is None:
-            return self.value
-        else:
-                        
-            if self.props is None:
-                return f"<{self.tag}>{self.value}</{self.tag}>"
-            # when additional properties are given
-            # LeafNode("a", "Click me!", {"href": "https://www.google.com"})
-            else:                
-                for key, value in self.props.items():
-                    k = key
-                    v = value
-
-                return f'<{self.tag} {k}="{v}">{self.value}</{self.tag}>'
+            return self.value        
+        
+        html = f"<{self.tag}"        
+        
+        if self.props:
+            props = self.props_to_html()
+            html += f" {props}"        
+        
+        html += f">{self.value}</{self.tag}>"
+        
+        return html
             
     def __repr__(self):
         return f'LeafNode("{self.tag}", "{self.value}", "{self.props}")'
@@ -68,8 +64,8 @@ class ParentNode(HTMLNode):
     def to_html(self):
         if self.tag is None:
             raise ValueError("ParentNode needs a tag")
-        if self.children is None:
-            raise ValueError("ParentNode needs to have a child")
+        # if self.children is None:
+        #     raise ValueError("ParentNode needs to have a child")
         
         # opening tag
         html = f"<{self.tag}"
@@ -91,7 +87,7 @@ class ParentNode(HTMLNode):
     def __repr__(self):
         return f"ParentNode({self.tag}, {self.children}, {self.props})"
             
-      
+    
             
 
 

@@ -1,6 +1,7 @@
-from htmlnode import HTMLNode
+from htmlnode import HTMLNode, ParentNode, LeafNode
 from markdown_to_blocks import markdown_to_blocks
 from block_to_block_type import block_to_block_type
+from text_to_textnodes import text_to_textnodes
 from textnode import TextNode
 from text_node_to_html_node import text_node_to_html_node
 
@@ -9,6 +10,7 @@ from text_node_to_html_node import text_node_to_html_node
 # quote
 # unordered list
 # ordered list
+
 
 block_type_paragraph = "paragraph"
 block_type_heading = "heading"
@@ -31,39 +33,46 @@ def markdown_to_html_node(markdown):
         # based on type: create new HTMLNode
         if type == block_type_paragraph:            
             children = text_to_children(block)
-            new_nodes.append(HTMLNode("p", None, children))
+            new_nodes.append(ParentNode("p", None, children))
 
         if type == block_type_heading:
             if block.startswith("# "):
+                block = block.lstrip("# ").strip()
                 children = text_to_children(block)
-                new_nodes.append(HTMLNode("h1", None, children))
-            if block.startswith("## "):
+                new_nodes.append(ParentNode("h1", None, children))
+            elif block.startswith("## "):
+                block = block.lstrip("## ").strip()
                 children = text_to_children(block)
-                new_nodes.append(HTMLNode("h2", None, children))
-            if block.startswith("### "):
+                new_nodes.append(ParentNode("h2", None, children))
+            elif block.startswith("### "):
+                block = block.lstrip("### ").strip()
                 children = text_to_children(block)
-                new_nodes.append(HTMLNode("h3", None, children))
-            if block.startswith("#### "):
+                new_nodes.append(ParentNode("h3", None, children))
+            elif block.startswith("#### "):
+                block = block.lstrip("#### ").strip()
                 children = text_to_children(block)
-                new_nodes.append(HTMLNode("h4", None, children))
-            if block.startswith("##### "):
+                new_nodes.append(ParentNode("h4", None, children))
+            elif block.startswith("##### "):
+                block = block.lstrip("##### ").strip()
                 children = text_to_children(block)
-                new_nodes.append(HTMLNode("h5", None, children))
-            if block.startswith("###### "):
+                new_nodes.append(ParentNode("h5", None, children))
+            elif block.startswith("###### "):
+                block = block.lstrip("###### ").strip()
                 children = text_to_children(block)
-                new_nodes.append(HTMLNode("h6", None, children))
+                new_nodes.append(ParentNode("h6", None, children))
 
         # code blocks surrounded by <code>, nested inside a <pre> tag
-        if type == block_type_code:            
+        if type == block_type_code:   
+            block = block.strip().strip("`").strip("\n")         
             children = text_to_children(block)
-            code_block = HTMLNode("code", None, children)
-            new_nodes.append(HTMLNode("pre", None, [code_block]))
+            code_block = ParentNode("code", None, children)
+            new_nodes.append(ParentNode("pre", None, [code_block]))
                 
         if type == block_type_quote:
             # remove the ">"
-            block = block[:1].strip()
+            block = block.strip().strip("> ")
             children = text_to_children(block)
-            new_nodes.append(HTMLNode("blockquote", None, children))
+            new_nodes.append(ParentNode("blockquote", None, children))
 
         if type == block_type_unordered_list:
             lines = block.split("\n")
@@ -76,12 +85,12 @@ def markdown_to_html_node(markdown):
                 line_text = line[2:]  
                 line_children = text_to_children(line_text)                
                 
-                list_item_node = HTMLNode("li", None, line_children)                
+                list_item_node = ParentNode("li", None, line_children)                
                 
                 list_items.append(list_item_node)        
            
             # surrounded by a <ul> tag, and each list item should be surrounded by a <li> tag
-            unordered_list_node = HTMLNode("ul", None, list_items)                        
+            unordered_list_node = ParentNode("ul", None, list_items)                        
             new_nodes.append(unordered_list_node)          
             
         if type == block_type_ordered_list:
@@ -95,28 +104,37 @@ def markdown_to_html_node(markdown):
                 line_text = line[3:]  
                 line_children = text_to_children(line_text)                
                 
-                list_item_node = HTMLNode("li", None, line_children)                
+                list_item_node = ParentNode("li", None, line_children)                
                 
                 list_items.append(list_item_node)        
            
             # surrounded by a <ol> tag, and each list item should be surrounded by a <li> tag
-            unordered_list_node = HTMLNode("ol", None, list_items)                        
+            unordered_list_node = ParentNode("ol", None, list_items)                        
             new_nodes.append(unordered_list_node)
 
     # make all the block nodes children under a single parent HTML node
     # (which should just be a div) and return it
-    return HTMLNode("div", None, new_nodes)   
+    return ParentNode("div", None, new_nodes)   
 
     
 def text_to_children(text):
     """
     It takes a string of text and returns a list of HTMLNodes 
     that represent the inline markdown using previously created functions 
-    (think TextNode -> HTMLNode).    
+    (think TextNode -> HTMLNode).  
     """
 
-    node = TextNode(text, "text")
-    return text_node_to_html_node(node)
+    text_nodes = text_to_textnodes(text)
+
+    nodes = []
+    for node in text_nodes:
+        # expects a single node as input
+        nodes.append(text_node_to_html_node(node))
+
+    return nodes
+
+
+
 
    
 

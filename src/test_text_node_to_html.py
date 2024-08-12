@@ -8,7 +8,7 @@ class TestNodeToHTML(unittest.TestCase):
     def test_text_node_to_html_node_text(self):
         node = TextNode("This is a text node", "text", "https://www.boot.dev")
         result = text_node_to_html_node(node)
-        self.assertEqual(result, LeafNode("This is a text node", None, None))
+        self.assertEqual(result, LeafNode(None, "This is a text node", None))
         
 
     def test_text_node_to_html_node_bold(self):

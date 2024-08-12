@@ -27,5 +27,7 @@ def text_to_textnodes(text):
     return nodes       
 
 # text = "This is **text** with an *italic* word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
-# print(text_to_textnodes(text))
 
+
+# text = "**I like Tolkien**. Read my [first post here](/majesty) (sorry the link doesn't work yet)"
+# print(text_to_textnodes(text))

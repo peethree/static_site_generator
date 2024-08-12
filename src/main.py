@@ -5,13 +5,14 @@ from split_nodes_delimiter import split_nodes_delimiter
 from extract_markdown import extract_markdown_images, extract_markdown_links
 from split_nodes import split_nodes_image, split_nodes_link
 from markdown_to_html_node import markdown_to_html_node
+from generate_page import generate_page
 import os
 import re
 import shutil
 
 
 def main():
-    # remove public if it exists
+    # delete public if it exists
     if os.path.exists("public"):
         shutil.rmtree("public")      
 
@@ -19,14 +20,18 @@ def main():
         # get the files in static
         list_of_paths = dig_for_files("static")       
 
-    # copy over static files to public
-    for path in list_of_paths:     
-        relative_path = os.path.relpath(path, "static")               
-        destination_path = os.path.join("public", relative_path)
+        # copy over static files to public
+        for path in list_of_paths:     
+            relative_path = os.path.relpath(path, "static")               
+            destination_path = os.path.join("public", relative_path)
 
-        # make directories if they don't exist (public, public/images/)
-        os.makedirs(os.path.dirname(destination_path))                
-        shutil.copy(path, destination_path)
+            # make directories if they don't exist (public, public/images/)
+            os.makedirs(os.path.dirname(destination_path))                
+            shutil.copy(path, destination_path)
+
+    # Generate a page from content/index.md using template.html and write it to public/index.html
+    print(generate_page("content/index.md", "template.html", "public/index.html"))
+
 
 
 def dig_for_files(dir):    
