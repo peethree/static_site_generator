@@ -8,22 +8,22 @@ class HTMLNode:
     def to_html(self):
         raise NotImplementedError        
 
-    def props_to_html(self):                 
-
+    def props_to_html(self):              
         attributes = []               
         for key, value in self.props.items():
             attributes.append(f'{key}="{value}"')
 
         return " ".join(attributes)
 
+
     def __repr__(self):
         return f"HTMLNode({self.tag}, {self.value}, {self.children}, {self.props})"
     
 
 class LeafNode(HTMLNode):
-    def __init__(self, tag=None, value=None, props=None):
+    def __init__(self, tag, value, props=None):
     
-        super().__init__(tag, value, children=None, props=props)    
+        super().__init__(tag, value, None, props)    
 
 
     def to_html(self):    
@@ -42,10 +42,11 @@ class LeafNode(HTMLNode):
         
         html += f">{self.value}</{self.tag}>"
         
-        return html
+        return html    
+
             
     def __repr__(self):
-        return f'LeafNode("{self.tag}", "{self.value}", "{self.props}")'
+        return f'LeafNode({self.tag}, {self.value}, {self.props})'
     
     def __eq__(self, other):
         if not isinstance(other, LeafNode):
@@ -55,11 +56,10 @@ class LeafNode(HTMLNode):
                 self.props == other.props)
             
 
-class ParentNode(HTMLNode):
-    # tag, value, child, props
-    def __init__(self, tag=None, children=None, props=None):
+class ParentNode(HTMLNode):    
+    def __init__(self, tag, children, props=None):
 
-        super().__init__(tag, value=None, children=children, props=props)
+        super().__init__(tag, None, children, props)
 
     def to_html(self):
         if self.tag is None:
@@ -83,6 +83,7 @@ class ParentNode(HTMLNode):
         html += f"</{self.tag}>"
         
         return html
+
     
     def __repr__(self):
         return f"ParentNode({self.tag}, {self.children}, {self.props})"

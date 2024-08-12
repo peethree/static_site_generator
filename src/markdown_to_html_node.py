@@ -31,8 +31,12 @@ def markdown_to_html_node(markdown):
         type = block_to_block_type(block)
 
         # based on type: create new HTMLNode
-        if type == block_type_paragraph:            
-            children = text_to_children(block)
+        if type == block_type_paragraph:    
+            lines = block.split("\n")   
+            
+            paragraph = " ".join(lines)     
+            children = text_to_children(paragraph)
+
             new_nodes.append(ParentNode("p", None, children))
 
         if type == block_type_heading:
@@ -63,15 +67,30 @@ def markdown_to_html_node(markdown):
 
         # code blocks surrounded by <code>, nested inside a <pre> tag
         if type == block_type_code:   
-            block = block.strip().strip("`").strip("\n")         
+            block = block.strip().strip("`").strip("\n")  
+
             children = text_to_children(block)
             code_block = ParentNode("code", None, children)
+
             new_nodes.append(ParentNode("pre", None, [code_block]))
                 
         if type == block_type_quote:
-            # remove the ">"
-            block = block.strip().strip("> ")
-            children = text_to_children(block)
+            
+            # block = block.strip().strip("> ")       
+            # children = text_to_children(block)
+            # new_nodes.append(ParentNode("blockquote", None, children))
+
+            lines = block.split("\n")
+
+            new_lines = []
+
+            for line in lines:
+                # remove the ">"
+                new_lines.append(line.lstrip(">").strip())
+
+            text = " ".join(new_lines)
+            children = text_to_children(text)
+
             new_nodes.append(ParentNode("blockquote", None, children))
 
         if type == block_type_unordered_list:

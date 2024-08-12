@@ -85,9 +85,7 @@ def split_nodes_link(old_nodes):
 
     return new_nodes
 
-# old_nodes = [TextNode("This is text with a link to [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)",
-#         "text"), TextNode("This is text with an image ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)", "text")
-#         ]
+# old_nodes = [TextNode("This is text with a link to [to boot dev](https://www.boot.dev) and [to youtube](https://www.youtube.com/@bootdotdev)","text"), TextNode("This is text with an image ![rick roll](https://i.imgur.com/aKaOqIh.gif) and ![obi wan](https://i.imgur.com/fJRm4Vk.jpeg)", "text")]
 
 # print(split_nodes_link(old_nodes))
 
