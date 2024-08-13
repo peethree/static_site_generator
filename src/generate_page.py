@@ -1,12 +1,9 @@
 from markdown_to_html_node import markdown_to_html_node
-from htmlnode import HTMLNode, ParentNode, LeafNode
 from extract_title import extract_title
 import os
 
 
-def generate_page(from_path, template_path, dest_path):    
-    print("Generating page . . . ")
-
+def generate_page(from_path, template_path, dest_path):      
     # Read the markdown file at from_path and store the contents in a variable.
     with open(from_path, "r") as file:
         markdown_content = file.read()                 
@@ -17,8 +14,7 @@ def generate_page(from_path, template_path, dest_path):
     markdown_html_string = html_nodes.to_html()        
 
     # # Use the extract_title function to grab the title of the page.
-    title = extract_title(markdown_content)    
-         
+    title = extract_title(markdown_content)             
    
     # # Read the template file at template_path and store the contents in a variable.
     with open(template_path, "r") as file:
