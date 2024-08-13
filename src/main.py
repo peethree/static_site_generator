@@ -30,7 +30,7 @@ def main():
             shutil.copy(path, destination_path)
 
     # Generate a page from content/index.md using template.html and write it to public/index.html
-    print(generate_page("content/index.md", "template.html", "public/index.html"))
+    generate_page("content/index.md", "template.html", "public/index.html")
 
 
 
